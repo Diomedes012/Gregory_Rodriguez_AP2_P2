@@ -8,30 +8,33 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import ucne.edu.gregory_rodriguez_ap2_p2.presentation.detail.BorrameDetailScreen
-import ucne.edu.gregory_rodriguez_ap2_p2.presentation.list.BorrameListScreen
+import ucne.edu.gregory_rodriguez_ap2_p2.presentation.detail.GastoFormScreen
+import ucne.edu.gregory_rodriguez_ap2_p2.presentation.list.GastoListScreen
 
 @Composable
 fun AppNavDisplay(
     backStack: NavBackStack<NavKey>,
     innerPadding: PaddingValues
-){
+) {
     NavDisplay(
         backStack = backStack,
         modifier = Modifier.padding(innerPadding),
         entryProvider = entryProvider {
-            entry<Screen.List>{
-                BorrameListScreen(
-                    onClick = {id ->
-                        backStack.add(Screen.Detail(id))
+            entry<Screen.GastoList> {
+                GastoListScreen(
+                    onGastoClick = { gastoId ->
+                        backStack.add(Screen.GastoForm(gastoId))
+                    },
+                    onCreateGasto = {
+                        backStack.add(Screen.GastoForm(0))
                     }
                 )
             }
-
-            entry<Screen.Detail>{key ->
-                BorrameDetailScreen(
-                    onBack = {
-                        if(backStack.isNotEmpty()) backStack.removeAt(backStack.size - 1)
+            entry<Screen.GastoForm> { key ->
+                GastoFormScreen(
+                    gastoId = key.id,
+                    onNavigateBack = {
+                        if (backStack.isNotEmpty()) backStack.removeAt(backStack.size - 1)
                     }
                 )
             }

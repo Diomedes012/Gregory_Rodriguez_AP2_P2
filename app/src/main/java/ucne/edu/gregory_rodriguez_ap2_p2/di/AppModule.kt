@@ -9,28 +9,38 @@ import dagger.hilt.components.SingletonComponent
 import jakarta.inject.Singleton
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import ucne.edu.gregory_rodriguez_ap2_p2.data.remote.GastoRemoteDataSource
+import ucne.edu.gregory_rodriguez_ap2_p2.data.remote.GastosApi
+import ucne.edu.gregory_rodriguez_ap2_p2.data.remote.repository.GastoRepositoryImpl
+import ucne.edu.gregory_rodriguez_ap2_p2.domain.repository.GastoRepository
 
-@Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+@Module
+object AppModule {
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
     }
 
+    @Provides
+    @Singleton
+    fun provideApi(moshi: Moshi): GastosApi {
+        return Retrofit.Builder()
+            .baseUrl("https://api-2026-h7eddqgydxc0fmau.eastus2-01.azurewebsites.net/")
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+            .create(GastosApi::class.java)
+    }
 
     @Provides
     @Singleton
-    fun provideApi(moshi: Moshi): Api{
-        return Retrofit.Builder()
-            .baseUrl("")
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-            .create(Api::class.java)
+    fun provideGastoRepository(
+        gastoRemoteDataSource: GastoRemoteDataSource
+    ): GastoRepository {
+        return GastoRepositoryImpl(gastoRemoteDataSource)
     }
-
 }

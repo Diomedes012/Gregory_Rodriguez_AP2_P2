@@ -5,15 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.rememberNavBackStack
 import dagger.hilt.android.AndroidEntryPoint
+import ucne.edu.gregory_rodriguez_ap2_p2.presentation.navigation.AppNavDisplay
+import ucne.edu.gregory_rodriguez_ap2_p2.presentation.navigation.Screen
 import ucne.edu.gregory_rodriguez_ap2_p2.ui.theme.Gregory_Rodriguez_AP2_P2Theme
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -22,29 +20,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Gregory_Rodriguez_AP2_P2Theme {
+
+                val backStack = rememberNavBackStack(Screen.GastoList)
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    AppNavDisplay(
+                        backStack = backStack,
+                        innerPadding = innerPadding
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Gregory_Rodriguez_AP2_P2Theme {
-        Greeting("Android")
     }
 }
